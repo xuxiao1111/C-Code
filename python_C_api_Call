@@ -1,0 +1,64 @@
+#include <Python.h>
+#include <iostream>
+int main()
+{
+    Py_Initialize();
+    if (!Py_IsInitialized())
+    {
+        std::cout << "python init failed" << std::endl;
+        return 1;
+    }
+    PyRun_SimpleString("import sys");
+    PyRun_SimpleString("sys.path.append('./')");
+
+    PyObject* module = PyImport_ImportModule("pyemb7");
+    if (module == nullptr)
+    {
+        std::cout << "module not found: pyemb7" << std::endl;
+        return 1;
+    }
+    //无参函数调用
+    PyObject* func1 = PyObject_GetAttrString(module, "say");
+    if (!func1 || !PyCallable_Check(func1))
+    {
+        std::cout << "function not found: say" << std::endl;
+        return 1;
+    }
+    PyObject_CallObject(func1, nullptr);
+    //有参函数调用
+    PyObject* func2 = PyObject_GetAttrString(module, "add");
+    if (!func2 || !PyCallable_Check(func2))
+    {
+        std::cout << "function not found: add" << std::endl;
+        return 1;
+    }
+    /*PyObject* parg1 = PyLong_FromSize_t(1);
+    PyObject* parg2 = PyLong_FromSize_t(2);*/
+    PyObject* parg1 = Py_BuildValue("i", 1);
+    PyObject* parg2 = Py_BuildValue("i", 2);
+    PyObject* pargs = PyTuple_New(2);
+    PyTuple_SetItem(pargs, 0, parg1);
+    PyTuple_SetItem(pargs, 1, parg2);
+    PyObject_CallObject(func2, pargs);
+    //python类调用
+    PyObject* cls = PyObject_GetAttrString(module, "Person");
+    if (!cls)
+    {
+        std::cout << "class not found: Person" << std::endl;
+        return 1;
+    }
+    PyObject* args = PyTuple_New(2);
+    PyTuple_SetItem(args, 0, Py_BuildValue("s", "jack"));
+    PyTuple_SetItem(args, 1, Py_BuildValue("i", 18));
+    PyObject* obj = PyEval_CallObject(cls, args);// 6、根据类名实例化对象
+    PyObject* func = PyObject_GetAttrString(obj, "foo");// 7、根据对象得到成员函数
+    if (!func || !PyCallable_Check(func))
+    {
+        std::cout << "function not found: foo" << std::endl;
+        return 1;
+    }
+    PyObject_CallObject(func, nullptr);
+
+    Py_Finalize();      // 释放资源
+    return 0;
+}
