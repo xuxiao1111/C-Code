@@ -14,3 +14,5 @@
 #### ReflectDemo: c++反射实现的demo
 ***
 #### Adaptee.cpp: 适配器模式代码 示例
+***
+#### BridgePattern.cpp 桥接模式代码 示例
