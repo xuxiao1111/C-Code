@@ -18,3 +18,5 @@
 #### BridgePattern.cpp 桥接模式代码 示例
 ***
 #### DecorativePattern.cpp 装饰模式 代码示例
+***
+#### FlyweightPattern.cpp: 享元模式 代码示例
