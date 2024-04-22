@@ -20,3 +20,6 @@
 #### DecorativePattern.cpp 装饰模式 代码示例
 ***
 #### FlyweightPattern.cpp: 享元模式 代码示例
+***
+#### Multithread_atomic_Operation.cpp: 多线程原子操作简单示例
+
